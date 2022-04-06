@@ -19,10 +19,10 @@
 /*
  * Project-specific settings. Unfortunately we cannot put the name in there!
  */
-group = "com.github.fge";
+group = "io.datahubproject";
 version = "0.1.5-SNAPSHOT";
-sourceCompatibility = "1.6";
-targetCompatibility = "1.6"; // defaults to sourceCompatibility
+sourceCompatibility = "1.8";
+targetCompatibility = "1.8"; // defaults to sourceCompatibility
 
 project.ext {
     description = "Avro Schema to JSON Schema conversion and back";
