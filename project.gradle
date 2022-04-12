@@ -19,8 +19,8 @@
 /*
  * Project-specific settings. Unfortunately we cannot put the name in there!
  */
-group = "io.datahubproject"
-version = "0.1.0"
+group = "io.acryl"
+version = "0.1.2"
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8" // defaults to sourceCompatibility
 

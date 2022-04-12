@@ -16,4 +16,4 @@
  * - ASL 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 
-rootProject.name = "json-schema-avro";
+//rootProject.name = "json-schema-avro";
