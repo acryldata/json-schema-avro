@@ -70,7 +70,7 @@ into the corresponding Avro type.</p>
 
 ```xml
 <dependency>
-    <groupId>com.github.fge</groupId>
+    <groupId>io.acryl</groupId>
     <artifactId>json-schema-avro</artifactId>
     <version>your-version-here</version>
 </dependency>

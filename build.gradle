@@ -1,3 +1,6 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+
 /*
  * Copyright (c) 2014, Francis Galiegue (fgaliegue@gmail.com)
  *
@@ -18,50 +21,31 @@
 
 
 
-/*
- * This has to be here... It will not be taken into account in common.gradle!
- *
- * Looks like a serious bug... See also:
- *
- * http://forums.gradle.org/gradle/topics/buildscript_in_subprojects_ignored
- *
- * We also use Spring's propdeps plugin to have a _real_ provided scope. See:
- *
- * https://github.com/spring-projects/gradle-plugins/tree/master/propdeps-plugin
- */
-//buildscript {
-//    repositories {
-//        maven {
-//            url "http://repo.springsource.org/plugins-release";
-//        }
-//    }
-//    dependencies {
-//        classpath(group: "org.springframework.build.gradle",
-//            name: "propdeps-plugin", version: "0.0.5");
-//    }
-//};
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0"
+        classpath "com.palantir.gradle.gitversion:gradle-git-version:0.12.3"
+    }
+}
 
-//configure(allprojects) {
-//    apply(plugin: "propdeps");
-//    apply(plugin: "propdeps-maven");
-//    apply(plugin: "propdeps-idea");
-//    apply(plugin: "propdeps-eclipse");
-//}
+apply(plugin: "java")
+apply(plugin: "signing")
+apply(plugin: "io.codearte.nexus-staging")
+apply(plugin: "maven-publish")
+apply(plugin: "idea")
+apply(plugin: "eclipse")
 
-apply(plugin: "java");
-apply(plugin: "maven");
-apply(plugin: "signing");
-//apply(plugin: "osgi");
-apply(plugin: "idea");
-apply(plugin: "eclipse");
-
-apply(from: "project.gradle");
+apply(from: "project.gradle")
 
 /*
  * Repositories to use
  */
 repositories {
-    mavenCentral();
+    gradlePluginPortal()
+    mavenCentral()
 }
 
 /*
@@ -72,16 +56,16 @@ repositories {
  */
 test {
     useTestNG() {
-        useDefaultListeners = true;
-    };
+        useDefaultListeners = true
+    }
 }
 
 /*
  * Necessary to generate the source and javadoc jars
  */
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources";
-    from sourceSets.main.allSource;
+    classifier = "sources"
+    from sourceSets.main.allSource
 }
 
 /*
@@ -94,20 +78,25 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 //}
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = "javadoc";
-    from javadoc.destinationDir;
+    classifier = "javadoc"
+    from javadoc.destinationDir
 }
 
 artifacts {
-    archives jar;
-    archives sourcesJar;
-    archives javadocJar;
+    archives jar
+    archives sourcesJar
+    archives javadocJar
 }
 
 
+wrapper {
+    gradleVersion = "6.9.2"
+    distributionUrl = "http://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
+}
+
 task pom {
     doLast {
-        pom {}.writeTo("${projectDir}/pom.xml");
+        pom {}.writeTo("${projectDir}/pom.xml")
     }
 }
 
@@ -115,98 +104,133 @@ task pom {
  * SIGNING
  */
 
-project.ext {
-    gitrwscm = sprintf("git@github.com:fge/%s", name);
-    gitroscm = sprintf("https://github.com/fge/%s.git", name);
-    projectURL = sprintf("https://github.com/fge/%s", name);
-    sonatypeStaging = "https://oss.sonatype.org/service/local/staging/deploy/maven2/";
-    sonatypeSnapshots = "https://oss.sonatype.org/content/repositories/snapshots/";
-};
-
 task checkSigningRequirements {
     doLast {
-        def requiredProperties = ["sonatypeUsername", "sonatypePassword"];
-        def noDice = false;
+        def requiredProperties = ["sonatypeUsername", "sonatypePassword"]
+        def noDice = false
         requiredProperties.each {
             if (project.properties[it] == null) {
-                noDice = true;
+                noDice = true
                 System.err.printf("property \"%s\" is not defined!")
             }
         }
-        if (noDice) throw new IllegalStateException("missing required properties for " + "upload");
+        if (noDice) throw new IllegalStateException("missing required properties for " + "upload")
     }
 }
 
-uploadArchives {
-    dependsOn(checkSigningRequirements);
-    repositories {
-        mavenDeployer {
-            beforeDeployment {
-                MavenDeployment deployment -> signing.signPom(deployment);
+def detailedVersionString = "0.0.0-unknown-SNAPSHOT"
+def snapshotVersion = false
+if (project.hasProperty("releaseVersion")) {
+    version = releaseVersion
+    detailedVersionString = releaseVersion
+} else {
+    try {
+        // apply this plugin in a try-catch block so that we can handle cases without .git directory
+        apply plugin: "com.palantir.git-version"
+        println("In else section")
+        def details = versionDetails()
+        detailedVersionString = gitVersion()
+        version = details.lastTag
+        version = version.startsWith("v")? version.substring(1): version
+        def suffix = details.isCleanTag? "": "-SNAPSHOT"
+        snapshotVersion = ! details.isCleanTag
+    }
+    catch (Exception e) {
+        e.printStackTrace()
+        // last fall back
+        version = detailedVersionString
+    }
+}
+// trim version if it is of size 4 to size 3
+def versionParts = version.tokenize(".")
+if (versionParts.size() > 3) {
+    // at-least 4 part version
+    // we check if the 4th part is a .0 in which case we want to create a release
+    if (versionParts[3] != '0') {
+        snapshotVersion = true
+    }
+    versionParts = versionParts[0..2]
+    version = versionParts[0..2].join('.')
+}
+
+if (snapshotVersion) {
+    if (versionParts[versionParts.size()-1].isInteger()) {
+        version = versionParts[0..versionParts.size()-2].join('.') + '.' + (versionParts[versionParts.size()-1].toInteger()+1).toString() + "-SNAPSHOT"
+    } else {
+        // we are unable to part the last token as an integer, so we just append SNAPSHOT to this version
+        version = versionParts[0..versionParts.size()-1].join('.') + '-SNAPSHOT'
+    }
+}
+
+processResources {
+    filter(ReplaceTokens, tokens:[fullVersion: detailedVersionString])
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            pom {
+                name = 'Json Schema Avro'
+                group = 'io.acryl'
+                artifactId = 'json-schema-avro'
+                description = 'Avro Schema to JSON Schema conversion and back'
+                url = 'https://datahubproject.io'
+                artifacts = [javadocJar, sourcesJar]
+
+                scm {
+                    connection = 'scm:git:git://github.com/acryldata/json-schema-avro.git'
+                    developerConnection = 'scm:git:ssh://github.com:acryldata/json-schema-avro.git'
+                    url = 'https://github.com/acryldata/json-schema-avro.git'
+                }
+
+                licenses {
+                    license {
+                        name = "Apache Software License, version 2.0";
+                        url = "http://www.apache.org/licenses/LICENSE-2.0";
+                        distribution = "repo";
+                    }
+                    license {
+                        name = "Lesser General Public License, version 3 or greater";
+                        url = "http://www.gnu.org/licenses/lgpl.html";
+                        distribution = "repo";
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'datahub'
+                        name = 'Datahub'
+                        email = 'datahub@acryl.io'
+                    }
+                }
             }
 
-            repository(url: "${sonatypeStaging}") {
-                authentication(
-                    userName: project.properties["sonatypeUsername"],
-                    password: project.properties["sonatypePassword"]
-                );
-            }
-
-            snapshotRepository(url: "${sonatypeSnapshots}") {
-                authentication(
-                    userName: project.properties["sonatypeUsername"],
-                    password: project.properties["sonatypePassword"]
-                );
+            repositories {
+                maven {
+                    def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                    def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                    def ossrhUsername = findProperty("releaseUsername")
+                    def ossrhPassword = findProperty("releasePassword")
+                    credentials {
+                        username ossrhUsername
+                        password ossrhPassword
+                    }
+                    url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                }
             }
         }
     }
 }
 
-/*
- * Configure pom.xml on install, uploadArchives
- */
-[
-    install.repositories.mavenInstaller,
-    uploadArchives.repositories.mavenDeployer
-]*.pom*.whenConfigured { pom ->
-    pom.project {
-        name "${name}";
-        packaging "jar";
-        description "${description}";
-        url "${projectURL}";
-
-        scm {
-            url "${gitrwscm}";
-            connection "${gitrwscm}";
-            developerConnection "${gitroscm}";
-        }
-
-        licenses {
-            license {
-                name "Lesser General Public License, version 3 or greater";
-                url "http://www.gnu.org/licenses/lgpl.html";
-                distribution "repo";
-            };
-            license {
-                name "Apache Software License, version 2.0";
-                url "http://www.apache.org/licenses/LICENSE-2.0";
-                distribution "repo";
-            }
-        }
-
-        developers {
-            developer {
-                id "fge";
-                name "Francis Galiegue";
-                email "fgaliegue@gmail.com";
-            }
-        }
-    }
-}
-
-ext.forRelease = !version.endsWith("-SNAPSHOT");
 signing {
-    required { forRelease && gradle.taskGraph.hasTask("uploadArchives") };
-    sign configurations.archives;
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.maven
 }
 
+nexusStaging {
+    serverUrl = "https://s01.oss.sonatype.org/service/local/" //required only for projects registered in Sonatype after 2021-02-24
+    username = findProperty("sonatypeUsername")
+    password = findProperty("sonatypePassword")
+}

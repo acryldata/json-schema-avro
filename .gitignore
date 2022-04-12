@@ -6,3 +6,4 @@ out
 build
 .gradle
 classes
+gradle.properties
