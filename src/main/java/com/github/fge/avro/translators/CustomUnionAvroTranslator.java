@@ -54,6 +54,13 @@ public class CustomUnionAvroTranslator extends AvroTranslator {
     } else if (size == 0) {
       return;
     }
+    // For types where it is a union of some enum and String, just use String as the type
+    for (Schema schema : types) {
+      if (Schema.Type.STRING.equals(schema.getType())) {
+        selectTranslator(schema.getType()).translate(schema, jsonSchema, report);
+        return;
+      }
+    }
     final ArrayNode schemas = FACTORY.arrayNode();
     jsonSchema.getCurrentNode().set("oneOf", schemas);
 
