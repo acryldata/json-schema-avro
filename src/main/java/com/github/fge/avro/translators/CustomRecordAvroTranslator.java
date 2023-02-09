@@ -40,6 +40,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 import static com.github.fge.avro.translators.AvroTranslatorUtil.*;
 
 
+/**
+ * Customizes extended class to allow for modifications at the translate function level, specifically naming of types.
+ * Adds missing descriptions to root record and fixes references for subfields.
+ * Applies partial fix for the FIX ME comment present in the base repository to not mark fields as required when
+ * default is provided. Also fixes a silly error message to just pass through the original error.
+ */
 public class CustomRecordAvroTranslator extends AvroTranslator {
   private static final ObjectMapper OLD_MAPPER = new ObjectMapper();
 

@@ -31,6 +31,9 @@ import org.apache.avro.Schema;
 import static com.github.fge.avro.translators.AvroTranslatorUtil.*;
 
 
+/**
+ * Adds missing description for top level array and modifies selector logic for array sub items to customized util method
+ */
 public class CustomArrayAvroTranslator extends AvroTranslator {
   private static final AvroTranslator INSTANCE = new CustomArrayAvroTranslator();
 
