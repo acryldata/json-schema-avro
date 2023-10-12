@@ -20,6 +20,8 @@
 
 package com.github.fge.avro.translators;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -34,8 +36,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import org.apache.avro.Schema;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import static com.github.fge.avro.translators.AvroTranslatorUtil.*;
 
@@ -118,7 +118,7 @@ public class CustomRecordAvroTranslator extends AvroTranslator {
       propertyNode = FACTORY.objectNode();
       properties.set(fieldName, propertyNode);
       injectDefault(propertyNode, field);
-      if (field.defaultValue() == null || !(propertyNode.get("default") instanceof NullNode)) {
+      if (!field.hasDefaultValue() || !(propertyNode.get("default") instanceof NullNode)) {
         required.add(fieldName);
         if (root.get("required") == null) {
           root.set("required", required);
@@ -134,7 +134,7 @@ public class CustomRecordAvroTranslator extends AvroTranslator {
   }
 
   private static void injectDefault(final ObjectNode propertyNode, final Schema.Field field) {
-    final JsonNode value = field.defaultValue();
+    final JsonNode value = OLD_MAPPER.convertValue(field.defaultVal(), JsonNode.class);
     if (value == null) {
       return;
     }

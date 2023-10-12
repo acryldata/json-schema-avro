@@ -29,6 +29,7 @@ buildscript {
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0"
         classpath "com.palantir.gradle.gitversion:gradle-git-version:0.12.3"
     }
+    ext.slf4jVersion = '1.7.36'
 }
 
 apply(plugin: "java")
@@ -100,7 +101,7 @@ targetCompatibility = "1.8"
 dependencies {
     compile(group: "com.github.fge", name: "json-schema-validator",
         version: "2.2.0")
-    compile(group: "org.apache.avro", name: "avro", version: "1.7.6") {
+    compile(group: "org.apache.avro", name: "avro", version: "1.11.3") {
         exclude(group: "org.slf4j", module: "slf4j-api")
         exclude(group: "org.apache.commons", module: "commons-compress")
         exclude(group: "com.thoughtworks.paranamer", module: "paranamer")
@@ -112,6 +113,7 @@ dependencies {
         exclude(group: "org.yaml", module: "snakeyaml")
     }
     testCompile(group: "org.mockito", name: "mockito-core", version: "1.9.5");
+    testCompile "org.slf4j:slf4j-api:$slf4jVersion"
 }
 
 javadoc.options.links("http://docs.oracle.com/javase/6/docs/api/")
@@ -198,7 +200,7 @@ processResources {
     filter(ReplaceTokens, tokens:[fullVersion: detailedVersionString])
 }
 
-version = "0.1.5"
+version = "0.2.0"
 
 publishing {
     publications {
@@ -206,7 +208,7 @@ publishing {
             pom {
                 name = 'Json Schema Avro'
                 group = 'io.acryl'
-                version = '0.1.5'
+                version = '0.2.0'
                 artifactId = 'json-schema-avro'
                 description = 'Avro Schema to JSON Schema conversion and back'
                 url = 'https://datahubproject.io'

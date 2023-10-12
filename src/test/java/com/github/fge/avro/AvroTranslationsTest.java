@@ -42,8 +42,8 @@ import static org.testng.Assert.*;
 
 public abstract class AvroTranslationsTest
 {
-    private static final Avro2JsonSchemaProcessor PROCESSOR
-        = new Avro2JsonSchemaProcessor();
+    private static final CustomAvro2JsonSchemaProcessor PROCESSOR
+        = new CustomAvro2JsonSchemaProcessor();
 
     private static final SyntaxValidator VALIDATOR
         = new SyntaxValidator(ValidationConfiguration.byDefault());
