@@ -67,16 +67,16 @@ public class CustomAvro2JsonSchemaProcessor extends RawProcessor<JsonTree, Schem
     final Schema.Type avroType = avroSchema.getType();
     selectTranslator(avroType).translate(avroSchema, tree, report);
 
-    JsonNode outputTree;
+    /*JsonNode outputTree;
     String rawJson = JacksonUtils.prettyPrint(tree.getBaseNode());
-    // Remove fully qualified name with avro type prepended
+    // Remove fully qualified name with avro type prepended.
     String sanitizedJson = rawJson.replaceAll("[a-z]+:([a-z0-9]+\\.)+", "");
     try {
-      outputTree = JsonLoader.fromString(sanitizedJson);
+      outputTree = JsonLoader.fromString(rawJson);
     } catch (IOException e) {
       throw new RuntimeException(e);
-    }
+    }*/
 
-    return new CanonicalSchemaTree(outputTree);
+    return new CanonicalSchemaTree(tree.getBaseNode());
   }
 }

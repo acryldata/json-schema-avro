@@ -1,0 +1,41 @@
+[
+  {
+    "avroSchema": {
+      "type": "record",
+      "name": "GlobalViewsSettings",
+      "namespace": "com.linkedin.settings.global",
+      "doc": "Settings for DataHub Views feature.",
+      "fields": [
+        {
+          "name": "defaultView",
+          "type": [
+            "null",
+            "string"
+          ],
+          "doc": "The default View for the instance, or organization.",
+          "default": null,
+          "java": {
+            "class": "com.linkedin.common.urn.Urn"
+          }
+        }
+      ]
+    },
+    "jsonSchema": {
+      "definitions": {
+        "GlobalViewsSettings": {
+          "description": "Settings for DataHub Views feature.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "defaultView": {
+              "default": null,
+              "description": "The default View for the instance, or organization.",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "$ref": "#/definitions/GlobalViewsSettings"
+    }
+  }
+]

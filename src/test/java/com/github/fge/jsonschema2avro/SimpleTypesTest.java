@@ -19,6 +19,8 @@
 package com.github.fge.jsonschema2avro;
 
 import java.io.IOException;
+import org.testng.annotations.Test;
+
 
 public final class SimpleTypesTest
     extends AvroWriterProcessorTest
@@ -27,5 +29,10 @@ public final class SimpleTypesTest
         throws IOException
     {
         super("simple");
+    }
+
+
+    @Test
+    public void noOpTest() {
     }
 }

@@ -79,9 +79,7 @@ public abstract class AvroTranslationsTest
     }
 
     @Test(
-        dataProvider = "testData",
-        invocationCount = 10,
-        threadPoolSize = 4
+        dataProvider = "testData"
     )
     public final void conversionIsCorrectlyPerformed(final JsonNode avroSchema,
         final JsonNode jsonSchema)
@@ -91,7 +89,7 @@ public abstract class AvroTranslationsTest
             = ValueHolder.<JsonTree>hold(new SimpleJsonTree(avroSchema));
 
         final ValueHolder<SchemaTree> output = PROCESSOR.process(report, input);
-        assertTrue(output.getValue().getBaseNode().equals(jsonSchema));
+        assertEquals(output.getValue().getBaseNode(), jsonSchema);
 
         assertTrue(VALIDATOR.schemaIsValid(jsonSchema));
     }

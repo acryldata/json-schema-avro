@@ -13,21 +13,7 @@
             }
         ],
         "jsonSchema": {
-            "oneOf": [
-                { "type": "string" },
-                { "type": "null" },
-                {
-                    "type": "object",
-                    "additionalProperties": {
-                        "$ref": "#/definitions/enum:gender"
-                    }
-                }
-            ],
-            "definitions": {
-                "enum:gender": {
-                    "enum": [ "MALE", "FEMALE", "WHOCARES" ]
-                }
-            }
+            "type": "string"
         }
     }
 ]

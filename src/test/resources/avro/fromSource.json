@@ -8,13 +8,13 @@
                 "DH" ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/enum:avro.examples.baseball.Position",
             "definitions": {
-                "enum:avro.examples.baseball.Position": {
+                "Position": {
                     "enum": [ "P", "C", "B1", "B2", "B3", "SS", "LF", "CF",
                         "RF", "DH" ]
                 }
-            }
+            },
+            "$ref": "#/definitions/Position"
         }
     },
     {
@@ -26,13 +26,13 @@
             "symbols": [ "Public", "Private" ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/enum:test.PrivacyDirectImport",
             "definitions": {
-                "enum:test.PrivacyDirectImport": {
+                "PrivacyDirectImport": {
                     "description": "Privacy Test Enum",
                     "enum": [ "Public", "Private" ]
                 }
-            }
+            },
+            "$ref": "#/definitions/PrivacyDirectImport"
         }
     },
     {
@@ -65,14 +65,13 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.apache.avro.FooBarSpecificRecord",
             "definitions": {
-                "enum:org.apache.avro.TypeEnum": {
+                "TypeEnum": {
                     "enum": [ "a", "b", "c" ]
                 },
-                "record:org.apache.avro.FooBarSpecificRecord": {
+                "FooBarSpecificRecord": {
                     "type": "object",
-                    "required": [ "id", "relatedids", "typeEnum" ],
+                    "required": [ "id", "relatedids"],
                     "additionalProperties": false,
                     "properties": {
                         "id": {
@@ -89,19 +88,13 @@
                             }
                         },
                         "typeEnum": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "$ref": "#/definitions/enum:org.apache.avro.TypeEnum"
-                                }
-                            ],
-                            "default": null
+                            "default": null,
+                            "$ref": "#/definitions/TypeEnum"
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/FooBarSpecificRecord"
         }
     },
     {
@@ -144,26 +137,18 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:Document",
             "definitions": {
-                "record:Language": {
+                "Language": {
                     "type": "object",
                     "required": [ "Country" ],
                     "additionalProperties": false,
                     "properties": {
                         "Country": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "type": "string"
-                                }
-                            ]
+                            "type": "string"
                         }
                     }
                 },
-                "record:Name": {
+                "Name": {
                     "type": "object",
                     "required": [ "Language" ],
                     "additionalProperties": false,
@@ -171,30 +156,32 @@
                         "Language": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/record:Language"
+                                "$ref": "#/definitions/Language"
                             }
                         }
                     }
                 },
-                "record:Document": {
+                "Document": {
                     "type": "object",
                     "required": [ "DocId", "Name" ],
                     "additionalProperties": false,
                     "properties": {
                         "DocId": {
                             "type": "integer",
+                            "format": "int64",
                             "minimum": -9223372036854775808,
                             "maximum": 9223372036854775807
                         },
                         "Name": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/record:Name"
+                                "$ref": "#/definitions/Name"
                             }
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/Document"
         }
     },
     {
@@ -268,37 +255,30 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:Document",
             "definitions": {
-                "record:Document": {
+                "Document": {
                     "type": "object",
                     "required": [ "DocId", "Links", "Name" ],
                     "additionalProperties": false,
                     "properties": {
                         "DocId": {
                             "type": "integer",
+                            "format": "int64",
                             "minimum": -9223372036854775808,
                             "maximum": 9223372036854775807
                         },
                         "Links": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "$ref": "#/definitions/record:Links"
-                                }
-                            ]
+                            "$ref": "#/definitions/Links"
                         },
                         "Name": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/record:Name"
+                                "$ref": "#/definitions/Name"
                             }
                         }
                     }
                 },
-                "record:Links": {
+                "Links": {
                     "type": "object",
                     "required": [ "Backward", "Forward" ],
                     "additionalProperties": false,
@@ -307,6 +287,7 @@
                             "type": "array",
                             "items": {
                                 "type": "integer",
+                                "format": "int64",
                                 "minimum": -9223372036854775808,
                                 "maximum": 9223372036854775807
                             }
@@ -315,13 +296,14 @@
                             "type": "array",
                             "items": {
                                 "type": "integer",
+                                "format": "int64",
                                 "minimum": -9223372036854775808,
                                 "maximum": 9223372036854775807
                             }
                         }
                     }
                 },
-                "record:Language": {
+                "Language": {
                     "type": "object",
                     "required": [ "Code", "Country" ],
                     "additionalProperties": false,
@@ -330,18 +312,11 @@
                             "type": "string"
                         },
                         "Country": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "type": "string"
-                                }
-                            ]
+                            "type": "string"
                         }
                     }
                 },
-                "record:Name": {
+                "Name": {
                     "type": "object",
                     "required": [ "Language", "Url" ],
                     "additionalProperties": false,
@@ -349,22 +324,16 @@
                         "Language": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/record:Language"
+                                "$ref": "#/definitions/Language"
                             }
                         },
                         "Url": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "type": "string"
-                                }
-                            ]
+                            "type": "string"
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/Document"
         }
     },
     {
@@ -385,9 +354,8 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.apache.avro.mapred.Pair",
             "definitions": {
-                "record:org.apache.avro.mapred.Pair": {
+                "Pair": {
                     "type": "object",
                     "required": [ "key", "value" ],
                     "additionalProperties": false,
@@ -397,12 +365,14 @@
                         },
                         "value": {
                             "type": "integer",
+                            "format": "int64",
                             "minimum": -9223372036854775808,
                             "maximum": 9223372036854775807
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/Pair"
         }
     },
     {
@@ -424,9 +394,8 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.apache.avro.mapreduce.TextStats",
             "definitions": {
-                "record:org.apache.avro.mapreduce.TextStats": {
+                "TextStats": {
                     "type": "object",
                     "required": [ "name", "count" ],
                     "additionalProperties": false,
@@ -443,7 +412,8 @@
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/TextStats"
         }
     },
     {
@@ -455,13 +425,13 @@
                 "DH" ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/enum:avro.examples.baseball.Position",
             "definitions": {
-                "enum:avro.examples.baseball.Position": {
+                "Position": {
                     "enum": [ "P", "C", "B1", "B2", "B3", "SS", "LF", "CF",
                         "RF", "DH" ]
                 }
-            }
+            },
+            "$ref": "#/definitions/Position"
         }
     },
     {
@@ -476,9 +446,8 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.foo.Foo",
             "definitions": {
-                "record:org.foo.Foo": {
+                "Foo": {
                     "type": "object",
                     "required": [ "x" ],
                     "additionalProperties": false,
@@ -490,7 +459,8 @@
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/Foo"
         }
     },
     {
@@ -501,14 +471,11 @@
             "fields": [ ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.on.the.classpath.FarAway",
             "definitions": {
-                "record:org.on.the.classpath.FarAway": {
-                    "enum": [
-                        {}
-                    ]
+                "FarAway": {
                 }
-            }
+            },
+            "$ref": "#/definitions/FarAway"
         }
     },
     {
@@ -523,9 +490,8 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:SimpleRecord",
             "definitions": {
-                "record:SimpleRecord": {
+                "SimpleRecord": {
                     "type": "object",
                     "required": [ "value" ],
                     "additionalProperties": false,
@@ -537,7 +503,8 @@
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/SimpleRecord"
         }
     },
     {
@@ -647,18 +614,17 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.apache.avro.Interop",
             "definitions": {
-                "enum:org.apache.avro.Kind": {
+                "Kind": {
                     "enum": [ "A", "B", "C" ]
                 },
-                "fixed:org.apache.avro.MD5": {
+                "MD5": {
                     "type": "string",
                     "pattern": "^[\u0000-\u00ff]*$",
                     "minLength": 16,
                     "maxLength": 16
                 },
-                "record:org.apache.avro.Foo": {
+                "Foo": {
                     "type": "object",
                     "required": [ "label" ],
                     "additionalProperties": false,
@@ -668,7 +634,7 @@
                         }
                     }
                 },
-                "record:org.apache.avro.Node": {
+                "Node": {
                     "type": "object",
                     "required": [ "label", "children" ],
                     "additionalProperties": false,
@@ -679,12 +645,12 @@
                         "children": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/record:org.apache.avro.Node"
+                                "$ref": "#/definitions/Node"
                             }
                         }
                     }
                 },
-                "record:org.apache.avro.Interop": {
+                "Interop": {
                     "type": "object",
                     "required": [
                         "intField", "longField", "stringField", "boolField",
@@ -701,6 +667,7 @@
                         },
                         "longField": {
                             "type": "integer",
+                            "format": "int64",
                             "minimum": -9223372036854775808,
                             "maximum": 9223372036854775807
                         },
@@ -732,7 +699,7 @@
                         "mapField": {
                             "type": "object",
                             "additionalProperties": {
-                                "$ref": "#/definitions/record:org.apache.avro.Foo"
+                                "$ref": "#/definitions/Foo"
                             }
                         },
                         "unionField": {
@@ -753,17 +720,18 @@
                             ]
                         },
                         "enumField": {
-                            "$ref": "#/definitions/enum:org.apache.avro.Kind"
+                            "$ref": "#/definitions/Kind"
                         },
                         "fixedField": {
-                            "$ref": "#/definitions/fixed:org.apache.avro.MD5"
+                            "$ref": "#/definitions/MD5"
                         },
                         "recordField": {
-                            "$ref": "#/definitions/record:org.apache.avro.Node"
+                            "$ref": "#/definitions/Node"
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/Interop"
         }
     },
     {
@@ -788,9 +756,8 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:test.Weather",
             "definitions": {
-                "record:test.Weather": {
+                "Weather": {
                     "description": "A weather reading.",
                     "type": "object",
                     "required": [ "station", "time", "temp" ],
@@ -801,6 +768,7 @@
                         },
                         "time": {
                             "type": "integer",
+                            "format": "int64",
                             "minimum": -9223372036854775808,
                             "maximum": 9223372036854775807
                         },
@@ -811,7 +779,8 @@
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/Weather"
         }
     },
     {
@@ -833,49 +802,19 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.apache.avro.data.Json",
             "definitions": {
-                "record:org.apache.avro.data.Json": {
+                "Json": {
                     "type": "object",
                     "required": [ "value" ],
                     "additionalProperties": false,
                     "properties": {
                         "value": {
-                            "oneOf": [
-                                {
-                                    "type": "integer",
-                                    "minimum": -9223372036854775808,
-                                    "maximum": 9223372036854775807
-                                },
-                                {
-                                    "type": "number"
-                                },
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "boolean"
-                                },
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/record:org.apache.avro.data.Json"
-                                    }
-                                },
-                                {
-                                    "type": "object",
-                                    "additionalProperties": {
-                                        "$ref": "#/definitions/record:org.apache.avro.data.Json"
-                                    }
-                                }
-                            ]
+                            "type": "string"
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/Json"
         }
     },
     {
@@ -914,63 +853,42 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.apache.avro.ipc.HandshakeResponse",
             "definitions": {
-                "enum:org.apache.avro.ipc.HandshakeMatch": {
+                "HandshakeMatch": {
                     "enum": [ "BOTH", "CLIENT", "NONE" ]
                 },
-                "fixed:org.apache.avro.ipc.MD5": {
+                "MD5": {
                     "type": "string",
                     "pattern": "^[\u0000-\u00ff]*$",
                     "minLength": 16,
                     "maxLength": 16
                 },
-                "record:org.apache.avro.ipc.HandshakeResponse": {
+                "HandshakeResponse": {
                     "type": "object",
                     "required": [ "match", "serverProtocol", "serverHash",
                         "meta" ],
                     "additionalProperties": false,
                     "properties": {
                         "match": {
-                            "$ref": "#/definitions/enum:org.apache.avro.ipc.HandshakeMatch"
+                            "$ref": "#/definitions/HandshakeMatch"
                         },
                         "serverProtocol": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "type": "string"
-                                }
-                            ]
+                            "type": "string"
                         },
                         "serverHash": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "$ref": "#/definitions/fixed:org.apache.avro.ipc.MD5"
-                                }
-                            ]
+                            "$ref": "#/definitions/MD5"
                         },
                         "meta": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "type": "object",
-                                    "additionalProperties": {
-                                        "type": "string",
-                                        "pattern": "^[\u0000-\u00ff]*$"
-                                    }
-                                }
-                            ]
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string",
+                                "pattern": "^[\u0000-\u00ff]*$"
+                            }
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/HandshakeResponse"
         }
     },
     {
@@ -1005,53 +923,39 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:org.apache.avro.ipc.HandshakeRequest",
             "definitions": {
-                "fixed:org.apache.avro.ipc.MD5": {
+                "MD5": {
                     "type": "string",
                     "pattern": "^[\u0000-\u00ff]*$",
                     "minLength": 16,
                     "maxLength": 16
                 },
-                "record:org.apache.avro.ipc.HandshakeRequest": {
+                "HandshakeRequest": {
                     "type": "object",
                     "required": [ "clientHash", "clientProtocol", "serverHash",
                         "meta" ],
                     "additionalProperties": false,
                     "properties": {
                         "clientHash": {
-                            "$ref": "#/definitions/fixed:org.apache.avro.ipc.MD5"
+                            "$ref": "#/definitions/MD5"
                         },
                         "clientProtocol": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "type": "string"
-                                }
-                            ]
+                            "type": "string"
                         },
                         "serverHash": {
-                            "$ref": "#/definitions/fixed:org.apache.avro.ipc.MD5"
+                            "$ref": "#/definitions/MD5"
                         },
                         "meta": {
-                            "oneOf": [
-                                {
-                                    "type": "null"
-                                },
-                                {
-                                    "type": "object",
-                                    "additionalProperties": {
-                                        "type": "string",
-                                        "pattern": "^[\u0000-\u00ff]*$"
-                                    }
-                                }
-                            ]
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string",
+                                "pattern": "^[\u0000-\u00ff]*$"
+                            }
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/HandshakeRequest"
         }
     },
     {
@@ -1075,9 +979,8 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:example.avro.User",
             "definitions": {
-                "record:example.avro.User": {
+                "User": {
                     "type": "object",
                     "required": [ "name", "favorite_number", "favorite_color" ],
                     "additionalProperties": false,
@@ -1086,30 +989,17 @@
                             "type": "string"
                         },
                         "favorite_number": {
-                            "oneOf": [
-                                {
-                                    "type": "integer",
-                                    "minimum": -2147483648,
-                                    "maximum": 2147483647
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
+                            "type": "integer",
+                            "minimum": -2147483648,
+                            "maximum": 2147483647
                         },
                         "favorite_color": {
-                            "oneOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
+                            "type": "string"
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/User"
         }
     }
 ]

@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import org.apache.avro.JsonProperties;
 import org.apache.avro.Schema;
 
 import static com.github.fge.avro.translators.AvroTranslatorUtil.*;
@@ -134,7 +135,19 @@ public class CustomRecordAvroTranslator extends AvroTranslator {
   }
 
   private static void injectDefault(final ObjectNode propertyNode, final Schema.Field field) {
-    final JsonNode value = OLD_MAPPER.convertValue(field.defaultVal(), JsonNode.class);
+    final JsonNode value;
+    if (field.hasDefaultValue()) {
+      if (field.defaultVal() instanceof JsonNode) {
+        value = (JsonNode) field.defaultVal();
+      } else if (JsonProperties.NULL_VALUE.equals(field.defaultVal())) {
+        value = OLD_MAPPER.nullNode();
+      } else {
+        value = OLD_MAPPER.convertValue(field.defaultVal(), JsonNode.class);
+      }
+    } else {
+      return;
+    }
+
     if (value == null) {
       return;
     }
