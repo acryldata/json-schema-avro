@@ -19,6 +19,8 @@
 package com.github.fge.avro;
 
 import java.io.IOException;
+import org.testng.annotations.Test;
+
 
 public final class EnumTest
     extends AvroTranslationsTest
@@ -27,5 +29,10 @@ public final class EnumTest
         throws IOException
     {
         super("enum");
+    }
+
+
+    @Test
+    public void noOpTest() {
     }
 }

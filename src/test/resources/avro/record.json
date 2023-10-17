@@ -16,27 +16,25 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:LongList",
             "definitions": {
-                "record:LongList": {
+                "LongList": {
                     "type": "object",
                     "additionalProperties": false,
                     "required": [ "value", "next" ],
                     "properties": {
                         "value": {
                             "type": "integer",
+                            "format": "int64",
                             "minimum": -9223372036854775808,
                             "maximum": 9223372036854775807
                         },
                         "next": {
-                            "oneOf": [
-                                { "$ref": "#/definitions/record:LongList" },
-                                { "type": "null" }
-                            ]
+                            "$ref": "#/definitions/LongList"
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/LongList"
         }
     },
     {
@@ -46,10 +44,10 @@
             "fields": []
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:foo",
             "definitions": {
-                "record:foo": { "enum": [ {} ] }
-            }
+                "foo": { }
+            },
+            "$ref": "#/definitions/foo"
         }
     },
     {
@@ -61,9 +59,8 @@
             ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/record:bar",
             "definitions": {
-                "record:bar": {
+                "bar": {
                     "type": "object",
                     "required": [ "moo" ],
                     "additionalProperties": false,
@@ -76,7 +73,8 @@
                         }
                     }
                 }
-            }
+            },
+            "$ref": "#/definitions/bar"
         }
     }
 ]

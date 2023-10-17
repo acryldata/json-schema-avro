@@ -1,23 +1,25 @@
 [
     {
         "avroSchema": {
+            "namespace": "test",
             "name": "gender",
             "type": "enum",
             "symbols": [ "MALE", "FEMALE", "WHOCARES" ]
         },
         "jsonSchema": {
-            "$ref": "#/definitions/enum:gender",
             "definitions": {
-                "enum:gender": {
+                "gender": {
                     "enum": [ "MALE", "FEMALE", "WHOCARES" ]
                 }
-            }
+            },
+            "$ref": "#/definitions/gender"
         }
     },
     {
         "avroSchema": {
             "type": "map",
             "values": {
+                "namespace": "test",
                 "name": "gender",
                 "type": "enum",
                 "symbols": [ "MALE", "FEMALE", "WHOCARES" ]
@@ -26,10 +28,10 @@
         "jsonSchema": {
             "type": "object",
             "additionalProperties": {
-                "$ref": "#/definitions/enum:gender"
+                "$ref": "#/definitions/gender"
             },
             "definitions": {
-                "enum:gender": {
+                "gender": {
                     "enum": [ "MALE", "FEMALE", "WHOCARES" ]
                 }
             }

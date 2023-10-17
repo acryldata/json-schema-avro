@@ -55,7 +55,7 @@ public final class Avro2JsonSchemaProcessorTest
         final ProcessingReport report = new DevNullProcessingReport();
 
         try {
-            new Avro2JsonSchemaProcessor().process(report, input);
+            new CustomAvro2JsonSchemaProcessor().process(report, input);
             fail("No exception thrown!!");
         } catch (IllegalAvroSchemaException e) {
             final ProcessingMessage message = e.getProcessingMessage();

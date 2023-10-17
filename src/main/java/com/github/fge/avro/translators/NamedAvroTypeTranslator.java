@@ -43,10 +43,9 @@ abstract class NamedAvroTypeTranslator
         throws ProcessingException
     {
         final JsonPointer pwd = jsonSchema.getPointer();
-        final String avroName = avroSchema.getFullName();
-        final String fullName = typeName + ':' + avroName;
-        final JsonPointer ptr = JsonPointer.of("definitions", fullName);
-        if (!jsonSchema.hasDefinition(fullName)) {
+        final String avroName = avroSchema.getName();
+        final JsonPointer ptr = JsonPointer.of("definitions", avroName);
+        if (!jsonSchema.hasDefinition(avroName)) {
             jsonSchema.setPointer(ptr);
             doTranslate(avroSchema, jsonSchema, report);
             jsonSchema.setPointer(pwd);
