@@ -99,21 +99,20 @@ sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 dependencies {
-    compile(group: "com.github.fge", name: "json-schema-validator",
-        version: "2.2.0")
-    compile(group: "org.apache.avro", name: "avro", version: "1.11.3") {
+    implementation(group: "com.github.java-json-tools", name: "json-schema-validator", version: "2.2.14")
+    implementation(group: "org.apache.avro", name: "avro", version: "1.11.3") {
         exclude(group: "org.slf4j", module: "slf4j-api")
         exclude(group: "org.apache.commons", module: "commons-compress")
         exclude(group: "com.thoughtworks.paranamer", module: "paranamer")
         exclude(group: "org.xerial.snappy", module: "snappy-java")
     }
-    testCompile(group: "org.testng", name: "testng", version: "6.8.7") {
+    testImplementation(group: "org.testng", name: "testng", version: "6.8.7") {
         exclude(group: "junit", module: "junit")
         exclude(group: "org.beanshell", module: "bsh")
         exclude(group: "org.yaml", module: "snakeyaml")
     }
-    testCompile(group: "org.mockito", name: "mockito-core", version: "1.9.5");
-    testCompile "org.slf4j:slf4j-api:$slf4jVersion"
+    testImplementation(group: "org.mockito", name: "mockito-core", version: "1.9.5");
+    testImplementation "org.slf4j:slf4j-api:$slf4jVersion"
 }
 
 javadoc.options.links("http://fge.github.io/msg-simple/")
