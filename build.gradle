@@ -195,7 +195,7 @@ processResources {
     filter(ReplaceTokens, tokens:[fullVersion: detailedVersionString])
 }
 
-version = "0.2.2"
+version = "0.2.3"
 
 publishing {
     publications {
@@ -203,7 +203,7 @@ publishing {
             pom {
                 name = 'Json Schema Avro'
                 group = 'io.acryl'
-                version = '0.2.2'
+                version = '0.2.3'
                 artifactId = 'json-schema-avro'
                 description = 'Avro Schema to JSON Schema conversion and back'
                 url = 'https://datahubproject.io'
