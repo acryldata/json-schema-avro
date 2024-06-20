@@ -31,6 +31,9 @@ import org.apache.avro.Schema;
 import static com.github.fge.avro.translators.AvroTranslatorUtil.*;
 
 
+/**
+ * Adds missing description
+ */
 final class CustomMapAvroTranslator extends AvroTranslator {
   private static final AvroTranslator INSTANCE = new CustomMapAvroTranslator();
 

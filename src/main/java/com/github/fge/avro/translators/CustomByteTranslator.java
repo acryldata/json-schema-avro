@@ -27,6 +27,9 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import org.apache.avro.Schema;
 
 
+/**
+ * Adds missing description of field
+ */
 public class CustomByteTranslator extends AvroTranslator {
   private static final String BYTES_PATTERN = "^[\u0000-\u00ff]*$";
 

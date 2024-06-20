@@ -30,6 +30,10 @@ import java.net.URISyntaxException;
 import org.apache.avro.Schema;
 
 
+/**
+ * Customized to point to fixed type definition reference. We use Fixed types to represent certain types that have specific definitions
+ * in the schema and the default implementation ignores these, just setting the fixed type to a String of fixed size. EX: UUID
+ */
 public class CustomFixedTranslator extends AvroTranslator {
   private static final String BYTES_PATTERN = "^[\u0000-\u00ff]*$";
 

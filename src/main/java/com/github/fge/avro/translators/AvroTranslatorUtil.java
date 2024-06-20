@@ -23,6 +23,10 @@ package com.github.fge.avro.translators;
 import org.apache.avro.Schema;
 
 
+/**
+ * Overrides the types returned by AvroTranslators to customized types. Not all types needed to be customized so in cases
+ * where a customized type is not present, falls back to default behavior.
+ */
 public class AvroTranslatorUtil {
 
   private AvroTranslatorUtil() {

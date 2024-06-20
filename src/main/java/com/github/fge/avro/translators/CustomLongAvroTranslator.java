@@ -27,6 +27,9 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import org.apache.avro.Schema;
 
 
+/**
+ * Adds missing description and format
+ */
 final class CustomLongAvroTranslator extends AvroTranslator {
   private static final AvroTranslator INSTANCE = new CustomLongAvroTranslator();
 

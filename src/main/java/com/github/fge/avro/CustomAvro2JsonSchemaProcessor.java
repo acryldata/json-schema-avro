@@ -34,6 +34,18 @@ import org.apache.avro.Schema;
 import static com.github.fge.avro.translators.AvroTranslatorUtil.*;
 
 
+/**
+ * Customized class to allow extension and modifications to be separate from original class. Original class is marked as final
+ * which makes it impossible to extend externally and makes it less flexible in general. The naming change is also applied to other
+ * customized classes for the same reasons, especially for some of the translator subtypes which needed to be changed to not extend
+ * subtypes. Separation is also important since all of the code in this repo is under LGPL licensing.
+ * Changes from original:
+ *
+ * Translator selection logic has been modified to be able to modify the translation process. Modification to specific translators and
+ * logic outlined in each translator and the selector util.
+ *
+ * Sanitizes class names to shortname in translation, this results in cleaner output types which work with code generation.
+ */
 public class CustomAvro2JsonSchemaProcessor extends RawProcessor<JsonTree, SchemaTree> {
   public CustomAvro2JsonSchemaProcessor()
   {

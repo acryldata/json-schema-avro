@@ -32,6 +32,11 @@ import org.apache.avro.Schema;
 import static com.github.fge.avro.translators.AvroTranslatorUtil.*;
 
 
+/**
+ * Filters out NULL values that get added into the Avro Union, if this leaves the Union with a single type then we just treat it as that type
+ * instead of as a union. For types where the Union includes enums and String, then just uses String as any value is supported
+ * if String is allowed.
+ */
 public class CustomUnionAvroTranslator extends AvroTranslator {
   private static final AvroTranslator INSTANCE = new CustomUnionAvroTranslator();
 
